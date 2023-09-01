@@ -5,7 +5,6 @@ import React, {useState} from 'react';
 import {FieldValues, SubmitHandler, useForm} from "react-hook-form";
 
 
-import {Add, LocationCity, PlusOne, Public, Remove} from "@mui/icons-material";
 import Input from "@/components/Input";
 import {Button, IconButton} from "@mui/material";
 import DisplayNumber from "@/components/DisplayNumber";
@@ -14,24 +13,70 @@ import ColloutCard from "@/components/ColloutCard";
 
 function TextPicker() {
 
+    const [prediction, setPrediction] = useState('')
+    //   const handleClick = async() => {
+    //
+    //   try {
+    //     const response = await fetch('/api/machine', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json'
+    //       },
+    //       body: JSON.stringify({text:'asdasdasda'})
+    //     });
+    //     const data = await response.json();
+    //
+    //     console.log("data ",data.predictions)
+    //       setPrediction(data?.predictions)
+    //
+    //       console.log("prediction ",prediction)
+    //   } catch (error) {
+    //     console.log(error)
+    //   }
+    //
+    //
+    //
+    // }
+
+
     const [count, setCount] = useState(0);
     const [warning, setWarning] = useState(false);
 
     const {register, handleSubmit, formState: {errors}} = useForm()
 
-    const onSubmit = (data) => {
-        console.log("Number ", data.number);
-        setCount(data.number)
+    const onSubmit = async (input) => {
 
-        if (data.number === 0) {
-            setWarning(false);
-        } else {
-            setWarning(true)
+
+
+        try {
+            const response = await fetch('/api/machine', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({text: `${input.number}`})
+            });
+            const data = await response.json();
+
+            console.log("data ", input.number)
+            setPrediction(data?.predictions)
+            setCount(data?.predictions)
+            if (data?.predictions === 0) {
+                setWarning(true);
+            } else {
+
+                setWarning(false)
+            }
+
+
+            console.log("prediction ", input.number)
+        } catch (error) {
+            console.log(error)
         }
+
 
     }
     console.log("errors ", errors);
-
 
 
     return (
@@ -40,25 +85,25 @@ function TextPicker() {
             <div className={"space-y-2 flex flex-col justify-center items-center"}>
                 <div className={'flex flex-col justify-center items-center relative w-full pt-4'}>
                     <DisplayNumber value={count}/>
-                    {/*{*/}
-                    {/*    warning &&*/}
-                    {/*    <ColloutCard message={"Enter number between 0 - 10 "} warning/>*/}
-                    {/*}*/}
+                    {
+                        warning &&
+                        <ColloutCard message={"Spam "} warning/>
+                    }
                 </div>
 
 
-
-                <form onSubmit={handleSubmit(onSubmit)} className={"flex flex-col  max-w-sm gap-2"}>
+                <form onSubmit={handleSubmit(onSubmit)} className={"flex flex-col  max-w-md gap-2"}>
                     <Input
                         type="string"
                         register={register}
                         label={"Enter Text"}
-                        id={"number"}
+                        id={"text"}
                         errors={errors}
 
                     />
 
-                    <Button  color="warning"  variant="contained" className={"w-full bg-gray-700 text-white hover:bg-gray-600"}
+                    <Button color="warning" variant="contained"
+                            className={"w-full bg-gray-700 text-white hover:bg-gray-600"}
                             type="submit">Submit</Button>
                 </form>
 
