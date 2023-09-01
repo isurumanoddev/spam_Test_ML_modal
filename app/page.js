@@ -1,28 +1,30 @@
-
+'use client';
 import Container from "@/components/Container";
 
+export default function Home() {
 
-
-async function getData() {
-
-    const response = await fetch(`http://localhost/api/machine`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({text: "Great news, Your package cannot be delivered due to unpaid customs fees, please confirm your payment to avoid delays:https://u.to/xjXZHw"})
-    });
-    console.log("response ",response)
-
-    if (!response.ok) {
-        console.log(`HTTP error! Status: ${response.status}`);
-    }
-
-}
-
-export default async function Home() {
-      const data = await getData()
-         console.log("data ",data)
+    const handleClick = async() => {
+    
+        try {
+          const response = await fetch('/api/machine', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({text:'asdasdasda'})
+          });
+          const data = await response.json();
+    
+          console.log(data)
+        } catch (error) {
+          console.log(error)
+        }
+    
+        
+    
+      }
+    //   const data = await getData()
+    //      console.log("data ",data)
 
 
     return (
@@ -36,7 +38,7 @@ export default async function Home() {
             {/*    <pre>{response}</pre>*/}
             {/*</div>*/}
 
-
+<button onClick={handleClick} className='bg-white'>click</button>
         </main>
     );
 }
