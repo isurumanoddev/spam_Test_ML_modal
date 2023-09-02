@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {FieldValues, SubmitHandler, useForm} from "react-hook-form";
 
@@ -14,38 +14,24 @@ import ColloutCard from "@/components/ColloutCard";
 function TextPicker() {
 
     const [prediction, setPrediction] = useState('')
-    //   const handleClick = async() => {
-    //
-    //   try {
-    //     const response = await fetch('/api/machine', {
-    //       method: 'POST',
-    //       headers: {
-    //         'Content-Type': 'application/json'
-    //       },
-    //       body: JSON.stringify({text:'asdasdasda'})
-    //     });
-    //     const data = await response.json();
-    //
-    //     console.log("data ",data.predictions)
-    //       setPrediction(data?.predictions)
-    //
-    //       console.log("prediction ",prediction)
-    //   } catch (error) {
-    //     console.log(error)
-    //   }
-    //
-    //
-    //
-    // }
-
 
     const [count, setCount] = useState(0);
     const [warning, setWarning] = useState(false);
 
     const {register, handleSubmit, formState: {errors}} = useForm()
 
-    const onSubmit = async (input) => {
 
+    useEffect(() => {
+        if (prediction === 0) {
+            setWarning(true);
+        } else {
+
+            setWarning(false)
+        }
+    }, [prediction, count]);
+
+    console.log("warning ",warning)
+    const onSubmit = async (input) => {
 
 
         try {
@@ -58,15 +44,9 @@ function TextPicker() {
             });
             const data = await response.json();
 
-            console.log("data ", input.number)
+            console.log("data ", data)
             setPrediction(data?.predictions)
             setCount(data?.predictions)
-            if (data?.predictions === 0) {
-                setWarning(true);
-            } else {
-
-                setWarning(false)
-            }
 
 
             console.log("prediction ", input.number)
@@ -85,10 +65,23 @@ function TextPicker() {
             <div className={"space-y-2 flex flex-col justify-center items-center"}>
                 <div className={'flex flex-col justify-center items-center relative w-full pt-4'}>
                     <DisplayNumber value={count}/>
+
                     {
-                        warning &&
-                        <ColloutCard message={"Spam "} warning/>
+                        warning ? ( <ColloutCard warning message={"Spam "}/> ) : ( <ColloutCard  message={"Not Spam "}/> )
                     }
+
+                    {/*{*/}
+                    {/*    warning ?( <div className={'text-5xl'}>*/}
+                    {/*       It is not a Spam*/}
+                    {/*     <ColloutCard message={"Spam "}/>*/}
+                    {/*    </div> ) : (*/}
+                    {/*        <div className={'text-5xl'}>*/}
+                    {/*            It is a Spam*/}
+                    {/*        </div>*/}
+                    {/*    )*/}
+                    {/*}*/}
+
+
                 </div>
 
 
