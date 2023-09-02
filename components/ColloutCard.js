@@ -6,7 +6,7 @@ import {CheckCircleIcon, ExclamationCircleIcon} from "@heroicons/react/20/solid"
 function ColloutCard({message, warning}) {
 
     return (
-        <Callout className={`absolute top-0 `} title={message}
+        <Callout className={`absolute top-0  `} title={message}
                  icon={warning ? ExclamationCircleIcon : CheckCircleIcon}
 
                  color={warning ? "rose" : "teal"}

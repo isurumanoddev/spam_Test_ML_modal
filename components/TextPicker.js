@@ -14,21 +14,23 @@ import ColloutCard from "@/components/ColloutCard";
 function TextPicker() {
 
     const [prediction, setPrediction] = useState('')
-
-    const [count, setCount] = useState(0);
-    const [warning, setWarning] = useState(false);
+    const [warning, setWarning] = useState('');
+    const [hideMessage, setHideMessage] = useState(false);
 
     const {register, handleSubmit, formState: {errors}} = useForm()
 
 
     useEffect(() => {
         if (prediction === 0) {
-            setWarning(true);
-        } else {
+            setWarning('notSpam');
+        } else if (prediction === 1) {
 
-            setWarning(false)
+            setWarning('spam');
+
+        } else {
+            setWarning('');
         }
-    }, [prediction, count]);
+    }, [prediction]);
 
     console.log("warning ",warning)
     const onSubmit = async (input) => {
@@ -44,9 +46,9 @@ function TextPicker() {
             });
             const data = await response.json();
 
-            console.log("data ", data)
+            console.log("data ", prediction)
             setPrediction(data?.predictions)
-            setCount(data?.predictions)
+
 
 
             console.log("prediction ", input.number)
@@ -64,18 +66,31 @@ function TextPicker() {
 
             <div className={"space-y-2 flex flex-col justify-center items-center"}>
                 <div className={'flex flex-col justify-center items-center relative w-full pt-4'}>
-                    <DisplayNumber value={count}/>
+                    {/*<DisplayNumber value={prediction}/>*/}
 
                     {
-                        warning ? ( <ColloutCard warning message={"Spam "}/> ) : ( <ColloutCard  message={"Not Spam "}/> )
+                        warning === 'spam' ? <ColloutCard warning message={"Spam "}/> :
+                            warning === 'notSpam' ? <ColloutCard message={"Not Spam "}/> :
+                                null
                     }
 
+
+                    {/*{*/}
+                    {/*    warning ?( <div className={'text-5xl'}>*/}
+                    {/*       It is not a Spam*/}
+                    {/*     <ColloutCard message={"Spam "}/>*/}
+                    {/*    </div> ) : (*/}
+                    {/*        <div className={'text-5xl'}>*/}
+                    {/*            It is a Spam*/}
+                    {/*        </div>*/}
+                    {/*    )*/}
+                    {/*}*/}
 
 
                 </div>
 
 
-                <form onSubmit={handleSubmit(onSubmit)} className={"flex flex-col  max-w-md gap-2"}>
+                <form onSubmit={handleSubmit(onSubmit)} className={"flex flex-col pt-8  max-w-md gap-2"}>
                     <Input
                         type="string"
                         register={register}
@@ -85,7 +100,7 @@ function TextPicker() {
 
                     />
 
-                    <Button color="warning" variant="contained"
+                    <Button onClick={() => setHideMessage(true)} color="warning" variant="contained"
                             className={"w-full bg-gray-700 text-white hover:bg-gray-600"}
                             type="submit">Submit</Button>
                 </form>
