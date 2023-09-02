@@ -70,16 +70,6 @@ function TextPicker() {
                         warning ? ( <ColloutCard warning message={"Spam "}/> ) : ( <ColloutCard  message={"Not Spam "}/> )
                     }
 
-                    {/*{*/}
-                    {/*    warning ?( <div className={'text-5xl'}>*/}
-                    {/*       It is not a Spam*/}
-                    {/*     <ColloutCard message={"Spam "}/>*/}
-                    {/*    </div> ) : (*/}
-                    {/*        <div className={'text-5xl'}>*/}
-                    {/*            It is a Spam*/}
-                    {/*        </div>*/}
-                    {/*    )*/}
-                    {/*}*/}
 
 
                 </div>
